@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="testdemo.system.dao.UserMapper">
+
+    <resultMap id="userMap" type="testdemo.system.dto.User">
+
+        <result property="id" column="id"/>
+        <result property="userName" column="username"/>
+        <result property="password" column="password"/>
+
+    </resultMap>
+
+    <!--查询1-->
+    <select id="selectForPage1" resultType="User">
+        select * from sys_user limit #{param1},#{param2}
+    </select>
+
+    <!-- 查询2-->
+    <select id="selectForPage2" resultType="User">
+        select * from sys_user limit #{startIndex},#{pageSize}
+    </select>
+
+    <!-- 查询3-->
+    <select id="selectAll" resultType="User">
+        select * from sys_user
+    </select>
+
+    <!-- 查询总条数-->
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*) from sys_user
+    </select>
+
+    <!-- 查询4-->
+    <select id="selectForPage3" resultType="User">
+        select * from sys_user limit  #{startIndex},#{pageSize}
+    </select>
+
+    <!-- 查询5-->
+    <select id="selectForPage4" resultType="User">
+        select * from sys_user
+        where username like "%"#{keywords}"%"
+         limit  #{startIndex},#{pageSize}
+    </select>
+    <!-- 模糊查询查询总条数-->
+    <select id="selectCount2" resultType="java.lang.Integer"
+            parameterType="java.lang.String">
+        select count(*) from sys_user where
+        username like "%"#{keywords}"%"
+    </select>
+
+    <select id="select" resultMap="userMap">
+        select * from sys_user
+    </select>
+
+    <update id="updateById" parameterType="User">
+        update sys_user
+        set username = #{userName},
+            password = #{password}
+        where id = #{id}
+    </update>
+
+    <select id="selectOne" resultMap="userMap">
+        select * from sys_user where id = #{id}
+    </select>
+
+    <select id="selectByName" resultMap="userMap">
+        select * from sys_user where username = #{name}
+    </select>
+
+    <delete id="deleteOne">
+       delete from sys_user where id = #{id}
+    </delete>
+
+
+    <insert id="insertOne">
+        insert into sys_user(id,username,password)
+            values(#{id},#{userName},#{password})
+    </insert>
+
+
+    <insert id="insertMany">
+        insert into sys_user(id,username,password)
+            values
+            <foreach collection="list" item="user" index="index" separator=",">
+                (#{user.id} , #{user.userName},#{user.password})
+    </foreach>
+    </insert>
+
+</mapper>
